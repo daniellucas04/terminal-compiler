@@ -11,9 +11,9 @@ void atualizarPastas() {
 	char problema[26]="";
 	int i, count=0, caso=0;
   
-    if (dr == NULL)
-    {
-        printf("Não foi possível abrir o diretório\n" );
+  	// Se o diretório for NULL, encerra a busca
+    if (dr == NULL){
+        printf("Não foi posssível abrir o diretório.\n\n" );
     }
   
   	// Percorre os diretórios
@@ -26,7 +26,7 @@ void atualizarPastas() {
 	}
 	closedir(dr);
 	
-	// Percorre as pastas e encontra a quantidade de exercicios
+	// Percorre as pastas e encontra a quantidade de problemas
 	for(i=0;i<count;i++){
 		char caminho[50];
 		// Adicionado o caminho para percorrer
@@ -36,11 +36,10 @@ void atualizarPastas() {
     	caso = qtdCasos(caminho);
     	
 		// mostra a quantidade de problemas
-		printf("O Problema %c tem %d casos de teste\n", problema[i], caso);
+		printf("| O Problema %c tem %d casos de teste |\n", problema[i], caso);
 		caso=0;
 		closedir(dr);
 	}
-	printf("\n");
 }
 
 int qtdCasos(char dir[]) {
@@ -50,7 +49,7 @@ int qtdCasos(char dir[]) {
 	
 	// Se o diretório for NULL, encerra a busca
 	if (dr == NULL) {
-	    printf("Não foi possível abrir o diretório.\n");
+	    printf("Não foi posssível abrir o diretório.\n");
 	    return 0;
 	}	
 	
@@ -63,41 +62,47 @@ int qtdCasos(char dir[]) {
 	return casoEncontrado;
 }
 
-void executaCodigo(int casos, char exercicio) {
+void executaCodigo(int casos, char problema) {
 	int i;
 	for(i=1;i<=casos;i++){
 		char comando[100];
 		// Define o comando para recuperar a sapida
-		sprintf(comando,".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt\n\n", exercicio, exercicio, exercicio, i, exercicio, i);
+		sprintf(comando,".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt\n\n", problema, problema, problema, i, problema, i);
 		system(comando);
 	}
 }
 
-void validaCasos(int casos, char exercicio) {
+void validaCasos(int casos, char problema) {
 	int i;
+	// Percorre todos os casos de teste
 	for(i=1;i<=casos;i++){
 		FILE *output;
 		FILE *temp;
 		char output1[100]="", tempr[100]="", arqo[50], arqt[50];
 		
-		sprintf(arqo,".\\%c\\output\\%d.txt", exercicio, i);
+		// Constrói o comando para acessar o caso de teste esperado
+		sprintf(arqo,".\\%c\\output\\%d.txt", problema, i);
 		output=fopen(arqo,"r");
 		while(fscanf(output,"%s",output1) !=EOF)
 		
 		fflush(stdout);
 		fclose(output);
 		
-		sprintf(arqt,".\\%c\\temp\\%d.txt", exercicio, i);
+		// Constrói o comando para acessar a reposta recebida
+		sprintf(arqt,".\\%c\\temp\\%d.txt", problema, i);
 		temp=fopen(arqt,"r");
 		while(fscanf(temp,"%s",tempr) !=EOF)
 		
 		fflush(stdout);
 		fclose(temp);
 		
+		// Realiza a comparação do caso de teste esperado com a resposta recebida
 		if(strcmp(tempr,output1)==0){
-			printf("Caso %d [OKAY] \n", i);
+			// Resposta correta
+			printf("Caso de teste [%d] ................. [OK] \n", i);
 		}else{
-			printf("Caso %d [ERRO] \n", i);
+			// Resposta errada
+			printf("Caso de teste [%d] ............... [ERRO] \n", i);
 		}
 	}
 }

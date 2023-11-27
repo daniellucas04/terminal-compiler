@@ -6,7 +6,7 @@ struct dirent *dp;
 int main(){
 	setlocale(LC_ALL, "Portuguese");
 	int count, i, casosEncontrados = 0;
-	char compilar[50], arquivo[50], exercicio;
+	char compilar[50], arquivo[50], problema;
 	char diretorio[50];
 	
 	printf("     _                             _                 _       _             \n");
@@ -16,33 +16,34 @@ int main(){
 	printf(" \\___/ \\___/|_| |_|\\___||___/ |___/_|_| |_| |_|\\__,_|_|\\__,_|\\__\\___/|_|   \n\n");
 	
 	// Percorre as pastas e encontra os casos de teste
-	printf("----- Problemas encontrados -----\n");
+	printf("------- Problemas encontrados -------\n");
 	atualizarPastas();
+	printf("-------------------------------------\n\n");
 	
-	// Recupera informações do exercicio e código fonte
-	printf("Escolha qual o exercicio será resolvido: ");
-	scanf("%c", &exercicio);
+	// Recupera informaçõees do exercicio e código fonte
+	printf("Escolha qual problema será resolvido: ");
+	scanf("%c", &problema);
 
 	printf("Escolha qual arquivo será enviado: ");
 	scanf("%s", &arquivo);
 	
 	// Define o diretório para encontrar a quantidade de casos
-	sprintf(diretorio,".\\%c\\input", exercicio);
+	sprintf(diretorio,"./%c/input", problema);
 	dp = opendir(diretorio);
 	
 	// Encontra a quantidade de casos no diretório
 	casosEncontrados = qtdCasos(diretorio);
 	
 	// Compila o código no terminal
-	sprintf(compilar,"gcc %s -o .\\%c\\temp\\%c.exe", arquivo, exercicio, exercicio);
+	sprintf(compilar,"gcc %s -o ./%c/temp/%c.exe", arquivo, problema, problema);
 	system(compilar);
 	
 	printf("\nExecutando casos de teste...\n");
 	// Executa o código do aluno e coloca a saída no diretório temp
-	executaCodigo(casosEncontrados, exercicio);
+	executaCodigo(casosEncontrados, problema);
 	
 	// Verifica se os casos estão certos ou errados
-	validaCasos(casosEncontrados, exercicio);
+	validaCasos(casosEncontrados, problema);
 	
 	return 0;
 }
