@@ -23,6 +23,11 @@ int main(){
 	// Recupera informaçõees do exercicio e código fonte
 	printf("Escolha qual problema será resolvido: ");
 	scanf("%c", &problema);
+	
+	// Se a pasta não existir, fecha o programa
+	if(checarPasta(problema)==0){
+		return 0;
+	}
 
 	printf("Escolha qual arquivo será enviado: ");
 	scanf("%s", &arquivo);
@@ -35,8 +40,16 @@ int main(){
 	casosEncontrados = qtdCasos(diretorio);
 	
 	// Compila o código no terminal
-	sprintf(compilar,"gcc %s -o ./%c/temp/%c.exe", arquivo, problema, problema);
+	sprintf(compilar,"gcc %s -o ./%c/temp/%c.exe 2> erros.txt", arquivo, problema, problema);
 	system(compilar);
+	
+	system("DEL erros.txt");
+	if(checarExecutavel(problema) == 0){
+		printf("\n----------------------------------------\n");
+		printf("-------- | Erro de Compilação | --------\n");
+		printf("----------------------------------------\n");
+		return 0;
+	}
 	
 	printf("\nExecutando casos de teste...\n");
 	// Executa o código do aluno e coloca a saída no diretório temp
@@ -44,6 +57,9 @@ int main(){
 	
 	// Verifica se os casos estão certos ou errados
 	validaCasos(casosEncontrados, problema);
+	
+	// Deleta o executável gerado pela compilação
+	deletaExecutavel(problema);
 	
 	return 0;
 }

@@ -106,3 +106,65 @@ void validaCasos(int casos, char problema) {
 		}
 	}
 }
+
+void deletaExecutavel(char problema) {
+	char pasta[20],executavel[10],deleta[20];
+	sprintf(executavel,"%c.exe",problema);
+	sprintf(pasta,".\\%c\\temp",problema);
+	sprintf(deleta,"DEL .\\%c\\temp\\%c.exe",problema,problema);
+	DIR *dr = opendir(pasta);
+  
+  	// Se o diretório for NULL, encerra a busca
+    if (dr == NULL){
+        printf("Não foi posssível abrir o diretório.\n\n" );
+    }
+  
+  	// Percorre os diretórios
+    while ((dp = readdir(dr)) != NULL){
+    	// Verifica o nome do executável
+        if(strcmp(dp->d_name,executavel)==0){
+			system(deleta); // deleta o executável
+		}	
+	}
+	closedir(dr);
+}
+
+
+int checarExecutavel(char problema) {
+	char pasta[20],executavel[10];
+	sprintf(executavel,"%c.exe",problema);
+	sprintf(pasta,".\\%c\\temp",problema);
+	DIR *dr = opendir(pasta);
+	int i=0;
+  
+  	// Se o diretório for NULL, encerra a busca
+    if (dr == NULL){
+        printf("Não foi posssível abrir o diretório.\n\n" );
+    }
+  
+  	// Percorre os diretórios
+    while ((dp = readdir(dr)) != NULL){
+    	// Verifica o nome do diretório
+        if(strcmp(dp->d_name,executavel)==0){
+			i++;
+		}	
+	}
+	closedir(dr);
+	
+	return i;
+}
+
+int checarPasta(char problema) {
+	char pasta[20];
+	sprintf(pasta,".\\%c",problema);
+	DIR *dr = opendir(pasta);
+  
+  	// Se o diretório for NULL, encerra a busca
+    if (dr == NULL){
+        printf("Não foi posssível abrir o diretório.\n\n" );
+        return 0;
+    }
+	closedir(dr);
+	return 1;	
+}
+
