@@ -6,6 +6,10 @@
 
 struct dirent *dp;
 
+/*
+* atualizarPastas: Percorre o diretório e atualiza as pastas
+* return void
+*/
 void atualizarPastas() {
 	DIR *dr = opendir(".");
 	char problema[26]="";
@@ -42,6 +46,11 @@ void atualizarPastas() {
 	}
 }
 
+/*
+* qtdCasos: Percorre o diretório e encontra a quantidade de casos
+* @param STRING dir = diretório do problema
+* return int
+*/
 int qtdCasos(char dir[]) {
 	DIR *dr;
 	dr = opendir(dir);
@@ -62,16 +71,28 @@ int qtdCasos(char dir[]) {
 	return casoEncontrado;
 }
 
+/*
+* executaCodigo: Executa o codigo enviado e envia o resultado para pasta temp
+* @param INT casos     = Quantidade de casos que existe no problema
+* @param CHAR problema = Problema a ser executado
+* return void
+*/
 void executaCodigo(int casos, char problema) {
 	int i;
 	for(i=1;i<=casos;i++){
 		char comando[100];
 		// Define o comando para recuperar a sapida
-		sprintf(comando,".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt\n\n", problema, problema, problema, i, problema, i);
+		sprintf(comando,".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt", problema, problema, problema, i, problema, i);
 		system(comando);
 	}
 }
 
+/*
+* validaCasos: Valida os casos de teste utilizando a resposta do código enviado
+* @param INT casos     = Quantidade de casos que existe no problema
+* @param CHAR problema = Problema a ser verificado
+* return void
+*/
 void validaCasos(int casos, char problema) {
 	int i;
 	// Percorre todos os casos de teste
@@ -107,6 +128,11 @@ void validaCasos(int casos, char problema) {
 	}
 }
 
+/*
+* deletaExecutavel: Deleta o executável do código enviado
+* @param CHAR problema = caracter do problema
+* return void
+*/
 void deletaExecutavel(char problema) {
 	char pasta[20],executavel[10],deleta[20];
 	sprintf(executavel,"%c.exe",problema);
@@ -130,6 +156,11 @@ void deletaExecutavel(char problema) {
 }
 
 
+/*
+* checarExecutavel: Valida se o executável do programa existe
+* @param CHAR problema = caracter do problema
+* return int
+*/
 int checarExecutavel(char problema) {
 	char pasta[20],executavel[10];
 	sprintf(executavel,"%c.exe",problema);
@@ -154,6 +185,11 @@ int checarExecutavel(char problema) {
 	return i;
 }
 
+/*
+* checarPasta: Valida se a pasta do problema existe
+* @param CHAR problema = caracter do problema
+* return void
+*/
 int checarPasta(char problema) {
 	char pasta[20];
 	sprintf(pasta,".\\%c",problema);
