@@ -49,6 +49,6 @@ As respostas possíveis de se obter ao corrigir um código são:
 - OK: O código produziu a saída esperada corretamente,
 
 ### Alunos
-Daniel Lucas
-Mateus dos Santos
+Daniel Lucas <br>
+Mateus dos Santos <br>
 Luiz Felipe
