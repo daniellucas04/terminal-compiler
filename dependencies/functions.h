@@ -102,10 +102,10 @@ void validaCasos(int casos, char problema) {
 	// Percorre a quantidade de casos de teste
     for(i=1; i<=casos; i++){
     	// Define o caminho do caso de teste
-        sprintf(arqo,".\\%c\\output\\%d.txt", problema, i);
+        sprintf(arqo, ".\\%c\\output\\%d.txt", problema, i);
         output = fopen(arqo, "r");
         // Define o caminho da resposta do aluno
-        sprintf(arqt,".\\%c\\temp\\%d.txt", problema, i);
+        sprintf(arqt, ".\\%c\\temp\\%d.txt", problema, i);
         temp = fopen(arqt, "r");
         
         // Percorre o arquivo
