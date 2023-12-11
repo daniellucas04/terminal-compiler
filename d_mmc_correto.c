@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Função para calcular o Mínimo Múltiplo Comum (MMC) de dois números
+// FunÃ§Ã£o para calcular o MÃ­nimo MÃºltiplo Comum (MMC) de dois nÃºmeros
 int calcularMMC(int a, int b) {
     long long int temp, num1 = a, num2 = b;
 
@@ -13,7 +13,7 @@ int calcularMMC(int a, int b) {
     return (a * b) / num1;
 }
 
-// Função para calcular o MMC de uma sequência de números
+// FunÃ§Ã£o para calcular o MMC de uma sequÃªncia de nÃºmeros
 int calcularMMCDaSequencia(int numeros[], int n) {
     long long int mmc = numeros[0];
 	int i;
@@ -27,17 +27,17 @@ int calcularMMCDaSequencia(int numeros[], int n) {
 int main() {
     long long int n;
 
-    // Lê o tamanho da sequência
+    // LÃª o tamanho da sequÃªncia
     scanf("%lld", &n);
 
-    // Lê os elementos da sequência
+    // LÃª os elementos da sequÃªncia
     long long int numeros[n];
     int i;
     for (i = 0; i < n; i++) {
         scanf("%lld", &numeros[i]);
     }
 
-    // Calcula e imprime o MMC da sequência
+    // Calcula e imprime o MMC da sequÃªncia
     long long int mmc = calcularMMCDaSequencia(numeros, n);
     printf("%lld\n", mmc);
 
