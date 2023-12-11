@@ -21,7 +21,7 @@ Este sistema foi construído na linguagem C e tem por objetivo executar códigos
 7	return 0;
 8 }
 ```
-A linha 7 recebe os valores para o cálculo da soma, ou seja essa entrada deve ser os valores que o arquivo **input** deve conter.
+A linha 5 recebe os valores para o cálculo da soma, ou seja essa entrada deve ser os valores que o arquivo **input** deve conter.
 
 4 - Dentro da pasta **output** crie um arquivo _.txt_ para cada entrada criada anteriormente, ou seja, se existem 4 entradas, adicione 4 saídas, também numerados em sequência. Dentro do arquivo _.txt_ coloque o resultado esperado conforme a entrada do programa. Por exemplo
 
