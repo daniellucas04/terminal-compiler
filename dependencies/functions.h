@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <stdlib.h>
 
 struct dirent *dp;
 
 /*
 * atualizarPastas: Percorre o diretório e atualiza as pastas
-* return void
 */
 void atualizarPastas() {
 	DIR *dr = opendir(".");
@@ -24,7 +24,7 @@ void atualizarPastas() {
     while ((dp = readdir(dr)) != NULL){
     	// Verifica o nome do diretório
         if(dp->d_namlen==1 && strcmp(dp->d_name,".")!=0){
-        	strcat(problema,dp->d_name);
+        	strcat(problema, dp->d_name);
         	count++;
 		}	
 	}
@@ -34,7 +34,7 @@ void atualizarPastas() {
 	for(i=0;i<count;i++){
 		char caminho[50];
 		// Adicionado o caminho para percorrer
-		sprintf(caminho,".\\%c\\input", problema[i]);
+		sprintf(caminho, ".\\%c\\input", problema[i]);
 		
 		// Descrobre a quantidade de casos no caminho
     	caso = qtdCasos(caminho);
@@ -42,6 +42,8 @@ void atualizarPastas() {
 		// mostra a quantidade de problemas
 		printf("| O Problema %c tem %d casos de teste |\n", problema[i], caso);
 		caso=0;
+		
+		// Fecha a pasta
 		closedir(dr);
 	}
 }
@@ -49,12 +51,12 @@ void atualizarPastas() {
 /*
 * qtdCasos: Percorre o diretório e encontra a quantidade de casos
 * @param STRING dir = diretório do problema
-* return int
+* @return int casosEncontrados = Quantidade de casos encontrados
 */
 int qtdCasos(char dir[]) {
 	DIR *dr;
 	dr = opendir(dir);
-	int casoEncontrado;
+	int casosEncontrados;
 	
 	// Se o diretório for NULL, encerra a busca
 	if (dr == NULL) {
@@ -63,26 +65,25 @@ int qtdCasos(char dir[]) {
 	}	
 	
 	while ((dp = readdir(dr)) != NULL){
-    	if(dp->d_namlen>2){
-    		casoEncontrado++;
+    	if(dp->d_namlen > 2){
+    		casosEncontrados++;
 		}	
 	}
 	// Retorna a quantidade encontrada
-	return casoEncontrado;
+	return casosEncontrados;
 }
 
 /*
 * executaCodigo: Executa o codigo enviado e envia o resultado para pasta temp
 * @param INT casos     = Quantidade de casos que existe no problema
 * @param CHAR problema = Problema a ser executado
-* return void
 */
 void executaCodigo(int casos, char problema) {
 	int i;
-	for(i=1;i<=casos;i++){
+	for(i=1; i<=casos; i++){
 		char comando[100];
-		// Define o comando para recuperar a sapida
-		sprintf(comando,".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt", problema, problema, problema, i, problema, i);
+		// Define o comando para recuperar a saída
+		sprintf(comando, ".\\%c\\temp\\%c.exe < .\\%c\\input\\%d.txt > .\\%c\\temp\\%d.txt", problema, problema, problema, i, problema, i);
 		system(comando);
 	}
 }
@@ -91,53 +92,59 @@ void executaCodigo(int casos, char problema) {
 * validaCasos: Valida os casos de teste utilizando a resposta do código enviado
 * @param INT casos     = Quantidade de casos que existe no problema
 * @param CHAR problema = Problema a ser verificado
-* return void
 */
 void validaCasos(int casos, char problema) {
-	int i;
-	// Percorre todos os casos de teste
-	for(i=1;i<=casos;i++){
-		FILE *output;
-		FILE *temp;
-		char output1[100]="", tempr[100]="", arqo[50], arqt[50];
-		
-		// Constrói o comando para acessar o caso de teste esperado
-		sprintf(arqo,".\\%c\\output\\%d.txt", problema, i);
-		output=fopen(arqo,"r");
-		while(fscanf(output,"%s",output1) !=EOF)
-		
-		fflush(stdout);
-		fclose(output);
-		
-		// Constrói o comando para acessar a reposta recebida
-		sprintf(arqt,".\\%c\\temp\\%d.txt", problema, i);
-		temp=fopen(arqt,"r");
-		while(fscanf(temp,"%s",tempr) !=EOF)
-		
-		fflush(stdout);
-		fclose(temp);
-		
-		// Realiza a comparação do caso de teste esperado com a resposta recebida
-		if(strcmp(tempr,output1)==0){
-			// Resposta correta
-			printf("Caso de teste [%d] ................. [OK] \n", i);
-		}else{
-			// Resposta errada
-			printf("Caso de teste [%d] ............... [ERRO] \n", i);
-		}
-	}
+	int i, erro=0;
+    FILE *output;
+    FILE *temp;
+    char outputr, tempr, arqo[50], arqt[50];
+    
+	// Percorre a quantidade de casos de teste
+    for(i=1; i<=casos; i++){
+    	// Define o caminho do caso de teste
+        sprintf(arqo,".\\%c\\output\\%d.txt", problema, i);
+        output = fopen(arqo, "r");
+        // Define o caminho da resposta do aluno
+        sprintf(arqt,".\\%c\\temp\\%d.txt", problema, i);
+        temp = fopen(arqt, "r");
+        
+        // Percorre o arquivo
+		while((tempr = fgetc(temp)) != EOF){
+            outputr = fgetc(output);
+            // Valida se o caracter da resposta esperada é igual ao caracter da resposta enviada
+            if(outputr != tempr){
+            	erro=1; // Possui um erro
+            }
+        }
+        
+        // Realiza validação do erro
+        if(erro == 0){
+            printf("Caso de teste [%d] ................. [OK] \n", i);
+        }else{
+            printf("Caso de teste [%d] ............... [ERRO] \n", i);
+        }
+        
+        // Limpa os buffers e fecha os arquivos
+        fflush(stdout);
+        fclose(output);
+        fflush(stdout);
+        fclose(temp);
+        erro=0;
+    }
 }
 
 /*
 * deletaExecutavel: Deleta o executável do código enviado
 * @param CHAR problema = caracter do problema
-* return void
 */
 void deletaExecutavel(char problema) {
-	char pasta[20],executavel[10],deleta[20];
-	sprintf(executavel,"%c.exe",problema);
-	sprintf(pasta,".\\%c\\temp",problema);
-	sprintf(deleta,"DEL .\\%c\\temp\\%c.exe",problema,problema);
+	char pasta[20], executavel[10], deleta[20];
+	
+	// Atribui os caminhos para as variáveis
+	sprintf(executavel, "%c.exe", problema);
+	sprintf(pasta, ".\\%c\\temp", problema);
+	// Comando para deletar o executável
+	sprintf(deleta, "DEL .\\%c\\temp\\%c.exe", problema, problema);
 	DIR *dr = opendir(pasta);
   
   	// Se o diretório for NULL, encerra a busca
@@ -148,10 +155,12 @@ void deletaExecutavel(char problema) {
   	// Percorre os diretórios
     while ((dp = readdir(dr)) != NULL){
     	// Verifica o nome do executável
-        if(strcmp(dp->d_name,executavel)==0){
+        if(strcmp(dp->d_name, executavel)==0){
 			system(deleta); // deleta o executável
 		}	
 	}
+	
+	// Fecha a pasta
 	closedir(dr);
 }
 
@@ -159,14 +168,16 @@ void deletaExecutavel(char problema) {
 /*
 * checarExecutavel: Valida se o executável do programa existe
 * @param CHAR problema = caracter do problema
-* return int
+* @return int existe = Quantidade de executáveis na pasta
 */
 int checarExecutavel(char problema) {
 	char pasta[20],executavel[10];
-	sprintf(executavel,"%c.exe",problema);
-	sprintf(pasta,".\\%c\\temp",problema);
+	// Declara os caminhos para as variáveis
+	sprintf(executavel, "%c.exe", problema);
+	sprintf(pasta, ".\\%c\\temp", problema);
 	DIR *dr = opendir(pasta);
-	int i=0;
+	
+	int existe = 0;
   
   	// Se o diretório for NULL, encerra a busca
     if (dr == NULL){
@@ -176,23 +187,24 @@ int checarExecutavel(char problema) {
   	// Percorre os diretórios
     while ((dp = readdir(dr)) != NULL){
     	// Verifica o nome do diretório
-        if(strcmp(dp->d_name,executavel)==0){
-			i++;
+        if(strcmp(dp->d_name, executavel)==0){
+			existe++;
 		}	
 	}
+	// Fecha a pasta
 	closedir(dr);
-	
-	return i;
+	return existe;
 }
 
 /*
 * checarPasta: Valida se a pasta do problema existe
 * @param CHAR problema = caracter do problema
-* return void
+* @return int = 0 para não existe | 1 para existe
 */
 int checarPasta(char problema) {
 	char pasta[20];
-	sprintf(pasta,".\\%c",problema);
+	// Define o caminho para variável
+	sprintf(pasta, ".\\%c", problema);
 	DIR *dr = opendir(pasta);
   
   	// Se o diretório for NULL, encerra a busca
@@ -200,6 +212,7 @@ int checarPasta(char problema) {
         printf("Não foi posssível abrir o diretório.\n\n" );
         return 0;
     }
+    // Fecha a pasta
 	closedir(dr);
 	return 1;	
 }
