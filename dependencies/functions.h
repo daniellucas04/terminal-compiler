@@ -109,8 +109,8 @@ void validaCasos(int casos, char problema) {
         temp = fopen(arqt, "r");
         
         // Percorre o arquivo
-		while((tempr = fgetc(temp)) != EOF){
-            outputr = fgetc(output);
+		while(((tempr = fgetc(temp)) != EOF) || (outputr = fgetc(output)) != EOF){
+            
             // Valida se o caracter da resposta esperada é igual ao caracter da resposta enviada
             if(outputr != tempr){
             	erro=1; // Possui um erro
