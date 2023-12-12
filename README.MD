@@ -45,7 +45,7 @@ O programa solicitará para digitar o problema que será corrigido, insira o nom
 
 As respostas possíveis de se obter ao corrigir um código são:
 - Erro de compilação: existe um problema de sintaxe no código que não permite o código compilar.
-- ERRO: o código produziu uma saída inesperada ou problemas de acesso a endereços de memória.
+- ERRO: o código produziu uma saída inesperada.
 - OK: O código produziu a saída esperada corretamente,
 
 ### Alunos
