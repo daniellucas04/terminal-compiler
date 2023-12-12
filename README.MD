@@ -9,7 +9,9 @@ Este sistema foi construído na linguagem C e tem por objetivo executar códigos
 É necessário cadastrar um caso de teste com **input** e **output**. (Essas serão as entradas que o código receberá e as saídas que deve retornar)
 
 1 - Crie uma pasta para guardar os casos de teste do problema. Por exemplo A, B...
+
 2 - Crie dentro da pasta do problema 3 pastas, **input**, **output** e **temp**.
+
 3 - Dentro da pasta **input** crie um arquivo _.txt_ para cada entrada do problema, numerado em sequência (1.txt, 2.txt...), dentro deste arquivo adicione as entradas esperadas pelo programa. Por exemplo
 ```c
 1 #include<stdio>
